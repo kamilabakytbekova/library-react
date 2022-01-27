@@ -1,0 +1,35 @@
+{
+  "book":[
+    {
+      "name": "Белый пороход",
+      "author": "Ч. Айтматов",
+      "year": 2021,
+      "image": "https://picsum.photos/400/250",
+      "id":1
+    },
+    {
+     
+      "name": "Черный пороход",
+      "author": "Ч. Айтматов",
+      "year": 2020,
+      "image": "https://picsum.photos/400/250",
+      "id":2
+    },
+    {
+      
+      "name": "Серый пороход",
+      "author": "Ч. Айтматов",
+      "year": 2019,
+      "image": "https://picsum.photos/400/250",
+      "id":3
+    },
+    {
+      
+      "name": "Красный пороход",
+      "author": "Ч. Айтматов",
+      "year": 2022,
+      "image": "https://picsum.photos/400/250",
+      "id":4
+    }
+  ]
+}

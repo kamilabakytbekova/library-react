@@ -1,0 +1,11 @@
+.filter__block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 60px;
+}
+.filter__block_items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

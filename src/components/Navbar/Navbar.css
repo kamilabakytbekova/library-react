@@ -1,0 +1,18 @@
+.navbar {
+  height: 100px;
+  background: #ffffff;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+}
+.navbar input {
+  width: 746px;
+  height: 48px;
+  background: rgba(196, 196, 196, 0.75);
+  border-radius: 8px;
+  border: none;
+}
+.navbar button {
+  border-radius: 20px;
+  width: 100px;
+  height: 35px;
+  font-weight: bold;
+}
