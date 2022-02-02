@@ -120,8 +120,10 @@ const StoreProvider = (props) => {
     try {
       let response = await getDoc(doc(db, "users", `${userId}`));
       let booksCopy = [];
-      for (let key in response.data().booksInCart) {
-        booksCopy.push(response.data().booksInCart[key]);
+      if (response.exists && response.data().booksInCart) {
+        for (let key in response.data().booksInCart) {
+          booksCopy.push(response.data().booksInCart[key]);
+        }
       }
       let action = {
         type: "GET_BOOKS_FROM_CART",

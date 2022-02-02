@@ -40,7 +40,7 @@ const MyBooks = () => {
   if (!booksInCart) {
     return <h2>Loading...</h2>;
   }
-  if (booksInCart.length == 0) {
+  if (booksInCart.length === 0) {
     return <h2>У вас нет книг</h2>;
   }
   return (
