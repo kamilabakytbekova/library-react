@@ -11,6 +11,7 @@ const MainPage = () => {
   const [show, setShow] = useState(false);
   const [book, setBook] = useState(null);
   const [value, setValue] = useState("default");
+  const [active, setActive] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = (bookId) => {
@@ -45,6 +46,10 @@ const MainPage = () => {
   const availableClick = () => {
     availableHandler();
   };
+  const resetFilter = () => {
+    setActive("");
+    getBooks();
+  };
 
   return (
     <div>
@@ -56,6 +61,18 @@ const MainPage = () => {
           <button onClick={availableClick} variant="dark" className="available">
             доступные
           </button>
+          {isFiltered ? (
+            <button
+              onClick={resetFilter}
+              style={{
+                color: "black",
+                border: "none",
+                backgroundColor: "transparent",
+              }}
+            >
+              Сбросить
+            </button>
+          ) : null}
         </div>
 
         <div className="filter__block_items">
