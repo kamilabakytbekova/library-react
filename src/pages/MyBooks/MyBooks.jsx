@@ -1,24 +1,42 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import book from "../../img/book.png";
-import { Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { StoreContext } from "../../contexts/StoreProvider";
 import { AuthContext } from "../../contexts/AuthProvider";
+import { TestContext } from "../../contexts/TestProvider";
 
 const MyBooks = () => {
-  const { books, getBooks, getBooksFromCart, booksInCart } =
-    useContext(StoreContext);
   const { user } = useContext(AuthContext);
-  useEffect(() => {
-    getBooks();
-  }, []);
+  const {
+    getBooksFromCart,
+    booksInCart,
+    approvedHandler,
+    filteredBooks,
+    isFiltered,
+  } = useContext(StoreContext);
+
+  const [active, setActive] = useState("");
 
   useEffect(() => {
-    if (user && books) {
+    if (user) {
       getBooksFromCart(user.uid);
-      console.log("Auth");
     }
-  }, [user, books]);
-  console.log(booksInCart);
+  }, [user]);
+
+  const approved = (val) => {
+    approvedHandler(val);
+    if (val === true) {
+      setActive("approved");
+    } else {
+      setActive("notApproved");
+    }
+  };
+
+  const resetFilter = () => {
+    setActive("");
+    getBooksFromCart(user.uid);
+  };
+
   if (!booksInCart) {
     return <h2>Loading...</h2>;
   }
@@ -26,33 +44,77 @@ const MyBooks = () => {
   return (
     <div>
       <div className="filter__block">
-        <h2>Мои книги</h2>
-
+        <h2>Мои книги ({booksInCart.length})</h2>
         <div className="filter__block_items">
           <p>фильтр:</p>
-          <p className="available">одобрено</p>
-          <p className="available">неодобрено</p>
-        </div>
+          <button
+            onClick={() => approved(true)}
+            className={`available ${active === "approved" ? "active" : ""}`}
+          >
+            одобрено
+          </button>
+          <button
+            onClick={() => approved(false)}
+            className={`available ${active === "notApproved" ? "active" : ""}`}
+          >
+            неодобрено
+          </button>
 
-        <div className="filter__block_items">
-          <p>сортировка:</p>
-          <p className="available">по году издания</p>
-          <p className="available">по алфавиту</p>
+          {isFiltered ? (
+            <button
+              onClick={resetFilter}
+              style={{
+                color: "black",
+                border: "none",
+                backgroundColor: "transparent",
+              }}
+            >
+              Сбросить
+            </button>
+          ) : null}
         </div>
       </div>
-      <Row style={{ marginTop: "40px" }}>
-        <Col>
-          {booksInCart.map((item) => (
-            <Card key={item.id} style={{ width: "18rem" }}>
-              <Card.Img variant="top" src={item.image} />
-              <Card.Body>
-                <Card.Title>{item.name}</Card.Title>
-                <Card.Text>{item.author}</Card.Text>
-              </Card.Body>
-            </Card>
-          ))}
-        </Col>
-      </Row>
+      <Container>
+        <Row>
+          {isFiltered
+            ? filteredBooks.map((item) => (
+                <Col md={3}>
+                  <Card
+                    key={item.id}
+                    style={{ width: "18rem", height: "100%" }}
+                  >
+                    <Card.Img
+                      variant="top"
+                      src={item.image}
+                      style={{ objectFit: "contain", height: "300px" }}
+                    />
+                    <Card.Body>
+                      <Card.Title>{item.name}</Card.Title>
+                      <Card.Text>{item.author}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))
+            : booksInCart.map((item) => (
+                <Col md={3}>
+                  <Card
+                    key={item.id}
+                    style={{ width: "18rem", height: "100%" }}
+                  >
+                    <Card.Img
+                      variant="top"
+                      src={item.image}
+                      style={{ objectFit: "contain", height: "300px" }}
+                    />
+                    <Card.Body>
+                      <Card.Title>{item.name}</Card.Title>
+                      <Card.Text>{item.author}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+        </Row>
+      </Container>
     </div>
   );
 };

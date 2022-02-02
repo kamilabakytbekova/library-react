@@ -5,6 +5,7 @@ import { useState, useContext } from "react";
 import OffsetBookDetail from "../../components/DetailOffset/DetailOffset";
 import { StoreContext } from "../../contexts/StoreProvider";
 import firestore from "../../components/Firebase/Firebase";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const MainPage = () => {
   const [show, setShow] = useState(false);
@@ -18,13 +19,15 @@ const MainPage = () => {
   };
 
   const {
-    getSearchBook,
     sortBooks,
     books,
     getBooks,
     filteredBooks,
     isFiltered,
+    availableHandler,
   } = useContext(StoreContext);
+
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     getBooks();
@@ -39,6 +42,10 @@ const MainPage = () => {
     sortBooks(val);
   };
 
+  const availableClick = () => {
+    availableHandler();
+  };
+
   return (
     <div>
       <div className="filter__block">
@@ -46,7 +53,7 @@ const MainPage = () => {
 
         <div className="filter__block_items">
           <p>фильтр:</p>
-          <button variant="dark" className="available">
+          <button onClick={availableClick} variant="dark" className="available">
             доступные
           </button>
         </div>
@@ -74,12 +81,16 @@ const MainPage = () => {
         {isFiltered
           ? filteredBooks.map((item) => {
               return (
-                <Col key={item.id}>
+                <Col md={3} key={item.id}>
                   <Card
                     onClick={() => handleShow(item.id)}
-                    style={{ width: "18rem" }}
+                    style={{ width: "18rem", height: "100%" }}
                   >
-                    <Card.Img variant="top" src={item.image} />
+                    <Card.Img
+                      variant="top"
+                      src={item.image}
+                      style={{ objectFit: "contain", height: "300px" }}
+                    />
                     <Card.Body>
                       <Card.Title>{item.name}</Card.Title>
                       <Card.Text>{item.author}</Card.Text>
@@ -91,12 +102,16 @@ const MainPage = () => {
             })
           : books.map((item) => {
               return (
-                <Col key={item.id}>
+                <Col md={3} key={item.id}>
                   <Card
                     onClick={() => handleShow(item.id)}
-                    style={{ width: "18rem" }}
+                    style={{ width: "18rem", height: "100%" }}
                   >
-                    <Card.Img variant="top" src={item.image} />
+                    <Card.Img
+                      variant="top"
+                      src={item.image}
+                      style={{ objectFit: "contain", height: "300px" }}
+                    />
                     <Card.Body>
                       <Card.Title>{item.name}</Card.Title>
                       <Card.Text>{item.author}</Card.Text>

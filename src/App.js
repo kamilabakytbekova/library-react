@@ -7,6 +7,7 @@ import MyBooks from "./pages/MyBooks/MyBooks";
 import SignIn from "./pages/Registration/SignIn";
 import Login from "./pages/Registration/Login";
 import { AuthProvider } from "./contexts/AuthProvider";
+// import TestProvider from "./contexts/TestProvider";
 
 function App() {
   return (
@@ -16,8 +17,8 @@ function App() {
           <div className="container">
             <Navbar />
             <Routes>
-              <Route path="/myBooks" element={<MyBooks />} />
               <Route path="/" element={<MainPage />} />
+              <Route path="/myBooks" element={<MyBooks />} />
               <Route path="/signIn" element={<SignIn />} />
               <Route path="/login" element={<Login />} />
             </Routes>

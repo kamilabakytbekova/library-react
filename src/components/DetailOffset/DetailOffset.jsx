@@ -13,12 +13,12 @@ const OffsetBookDetail = ({ show, handleClose, bookId }) => {
     setCurrentBook(books.filter((item) => item.id === bookId)[0]);
   }, [bookId]);
 
-  if (!currentBook) return <h1>No book!</h1>;
-  const handleAddToCart = (bookId) => {
-    if (user) {
-      addBookToMyBooks(bookId, user.uid);
-    }
+  const handleAddToCart = (cartsBook) => {
+    addBookToMyBooks(cartsBook, user.uid);
   };
+
+  if (!currentBook) return <h1>No book!</h1>;
+
   return (
     <Offcanvas show={show} onHide={handleClose} placement="end">
       <Offcanvas.Header closeButton>
@@ -28,9 +28,7 @@ const OffsetBookDetail = ({ show, handleClose, bookId }) => {
         {currentBook.author}, {currentBook.year}
         <br />
         <button
-          onClick={() => {
-            handleAddToCart(currentBook.id);
-          }}
+          onClick={() => handleAddToCart(currentBook)}
           className="available detail-btn"
         >
           Взять книгу

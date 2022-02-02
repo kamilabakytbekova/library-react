@@ -2,8 +2,6 @@ import React, { useReducer, useState } from "react";
 import { db } from "../components/Firebase/Firebase";
 import { collection, doc, getDocs, setDoc, getDoc } from "firebase/firestore";
 import { createContext } from "react";
-import { API } from "../api/const";
-import { useNavigate } from "react-router-dom";
 
 export const StoreContext = createContext();
 
@@ -12,6 +10,7 @@ const INIT_STATE = {
   filteredBooks: null,
   isFiltered: false,
   booksInCart: null,
+  // available: null,
 };
 
 const reducer = (state, action) => {
@@ -20,10 +19,12 @@ const reducer = (state, action) => {
       return { ...state, books: action.payload, isFiltered: false };
     case "SORT_BOOKS":
       return { ...state, books: action.payload };
-    case "GET_CART":
-      return { ...state, booksInCart: action.payload };
+    case "GET_BOOKS_FROM_CART":
+      return { ...state, booksInCart: action.payload, isFiltered: false };
     case "FILTER_BOOKS":
       return { ...state, filteredBooks: action.payload, isFiltered: true };
+    // case "AVAILABLE":
+    //   return { ...state, available: action.payload };
     default:
       return state;
   }
@@ -96,15 +97,16 @@ const StoreProvider = (props) => {
     }
   };
 
-  const addBookToMyBooks = async (id, userId) => {
+  const addBookToMyBooks = async (cartsBook, userId) => {
     try {
       let response = await setDoc(
         doc(db, "users", `${userId}`),
         {
-          booksId: {
-            [id]: true,
+          booksInCart: {
+            [cartsBook.id]: cartsBook,
           },
         },
+
         {
           merge: true,
         }
@@ -116,22 +118,44 @@ const StoreProvider = (props) => {
   };
   const getBooksFromCart = async (userId) => {
     try {
-      const userDoc = await getDoc(doc(db, "users", `${userId}`));
-      if (userDoc.data().booksId) {
-        if (state.books) {
-          let newBookList = state.books.filter(
-            (book) => userDoc.data().booksId[book.id]
-          );
-          let action = {
-            type: "GET_CART",
-            payload: newBookList,
-          };
-          dispatch(action);
-        }
+      let response = await getDoc(doc(db, "users", `${userId}`));
+      let booksCopy = [];
+      for (let key in response.data().booksInCart) {
+        booksCopy.push(response.data().booksInCart[key]);
       }
-    } catch (error) {
-      console.log(error);
+      let action = {
+        type: "GET_BOOKS_FROM_CART",
+        payload: booksCopy,
+      };
+
+      dispatch(action);
+    } catch (err) {
+      console.log(err);
     }
+  };
+
+  const availableHandler = () => {
+    let available = state.books.filter((item) => item.count);
+
+    let action = {
+      type: "FILTER_BOOKS",
+      payload: available,
+    };
+    dispatch(action);
+  };
+
+  const approvedHandler = (val) => {
+    let approved;
+    if (val === true) {
+      approved = state.booksInCart.filter((item) => item.isApproved);
+    } else {
+      approved = state.booksInCart.filter((item) => !item.isApproved);
+    }
+    let action = {
+      type: "FILTER_BOOKS",
+      payload: approved,
+    };
+    dispatch(action);
   };
 
   return (
@@ -142,6 +166,8 @@ const StoreProvider = (props) => {
         sortBooks,
         addBookToMyBooks,
         getBooksFromCart,
+        availableHandler,
+        approvedHandler,
         filteredBooks: state.filteredBooks,
         books: state.books,
         booksInCart: state.booksInCart,
