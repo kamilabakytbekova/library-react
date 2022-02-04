@@ -1,3 +1,15 @@
+.filter__block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 60px;
+}
+.filter__block_items {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
 .available {
   margin-left: 10px;
   border: solid 1px black;
@@ -27,4 +39,19 @@
 /* detail offset */
 .detail-btn {
   margin-top: 40px;
+  background-color: rgba(0, 0, 0, 0.795);
+  color: white;
+}
+.detail-btn:hover {
+  background-color: white;
+  color: rgba(0, 0, 0, 0.795);
+}
+/* card */
+.card-items:hover {
+  border: solid 1px;
+  cursor: pointer;
+}
+.signOut-btn {
+  border: none;
+  width: 100%;
 }

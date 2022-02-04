@@ -97,25 +97,6 @@ const StoreProvider = (props) => {
     }
   };
 
-  const addBookToMyBooks = async (cartsBook, userId) => {
-    try {
-      let response = await setDoc(
-        doc(db, "users", `${userId}`),
-        {
-          booksInCart: {
-            [cartsBook.id]: cartsBook,
-          },
-        },
-
-        {
-          merge: true,
-        }
-      );
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   const getBooksFromCart = async (userId) => {
     try {
       let response = await getDoc(doc(db, "users", `${userId}`));
@@ -131,6 +112,26 @@ const StoreProvider = (props) => {
       };
 
       dispatch(action);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addBookToMyBooks = async (cartsBook, userId) => {
+    try {
+      let response = await setDoc(
+        doc(db, "users", `${userId}`),
+        {
+          booksInCart: {
+            [cartsBook.id]: cartsBook,
+          },
+        },
+
+        {
+          merge: true,
+        }
+      );
+      getBooksFromCart(userId);
     } catch (err) {
       console.log(err);
     }

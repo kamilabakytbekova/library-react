@@ -6,12 +6,19 @@ import { StoreContext } from "../../contexts/StoreProvider";
 const OffsetBookDetail = ({ show, handleClose, bookId }) => {
   const [currentBook, setCurrentBook] = useState({});
 
-  const { books, addBookToMyBooks } = useContext(StoreContext);
+  const { books, addBookToMyBooks, booksInCart, getBooksFromCart } =
+    useContext(StoreContext);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
     setCurrentBook(books.filter((item) => item.id === bookId)[0]);
   }, [bookId]);
+
+  useEffect(() => {
+    if (user) {
+      getBooksFromCart(user.uid);
+    }
+  }, [user]);
 
   const handleAddToCart = (cartsBook) => {
     addBookToMyBooks(cartsBook, user.uid);
@@ -26,13 +33,23 @@ const OffsetBookDetail = ({ show, handleClose, bookId }) => {
       </Offcanvas.Header>
       <Offcanvas.Body>
         {currentBook.author}, {currentBook.year}
+        <img
+          style={{ marginTop: "20px", width: 300 }}
+          src={currentBook.image}
+          alt=""
+        />
         <br />
-        <button
-          onClick={() => handleAddToCart(currentBook)}
-          className="available detail-btn"
-        >
-          Взять книгу
-        </button>
+        {booksInCart &&
+        booksInCart.filter((item) => currentBook.id === item.id).length ? (
+          <p style={{ marginTop: "40px" }}>Книга взята</p>
+        ) : (
+          <button
+            onClick={() => handleAddToCart(currentBook)}
+            className="available detail-btn"
+          >
+            Взять книгу
+          </button>
+        )}
       </Offcanvas.Body>
     </Offcanvas>
   );

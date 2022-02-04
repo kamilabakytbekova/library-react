@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import book from "../../img/book.png";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { StoreContext } from "../../contexts/StoreProvider";
 import { AuthContext } from "../../contexts/AuthProvider";
-import { TestContext } from "../../contexts/TestProvider";
+import { useNavigate } from "react-router-dom";
 
 const MyBooks = () => {
   const { user } = useContext(AuthContext);
@@ -16,6 +15,7 @@ const MyBooks = () => {
   } = useContext(StoreContext);
 
   const [active, setActive] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -37,12 +37,17 @@ const MyBooks = () => {
     getBooksFromCart(user.uid);
   };
 
+  if (!user) {
+    navigate("/");
+  }
+
   if (!booksInCart) {
     return <h2>Loading...</h2>;
   }
   if (booksInCart.length === 0) {
-    return <h2>У вас нет книг</h2>;
+    return <h2 style={{ marginTop: "60px" }}>У вас нет книг</h2>;
   }
+
   return (
     <div>
       <div className="filter__block">

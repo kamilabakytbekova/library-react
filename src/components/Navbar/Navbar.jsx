@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 import Search from "../Search/Search";
@@ -27,8 +27,8 @@ const Navibar = () => {
               </Link>
             </Nav.Link>
             <NavDropdown title={user.displayName} id="basic-nav-dropdown">
-              <NavDropdown.Item>
-                <button onClick={handleLogOut}>Выйти</button>
+              <NavDropdown.Item className="signOut-btn" onClick={handleLogOut}>
+                Выйти
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
